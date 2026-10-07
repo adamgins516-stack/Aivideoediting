@@ -1,5 +1,7 @@
 # aivideoediting
 
+**Start with `WALKTHROUGH.md`: exact copy-paste steps for the MacBook.**
+
 `premiere-edit/` is a Claude Code skill that edits a talking-head video and hands back an **editable Premiere Pro
 sequence** (not a flat mp4). It's a fork of the CapCut version, rebuilt for Premiere.
 
