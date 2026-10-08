@@ -29,6 +29,11 @@ Running a script against Premiere: Premiere has no universal "run script" menu. 
 the sequence open. If your build has File > Scripts > Run Script File, that works too. `var DRY = true;` at the top of
 the script logs what it would do without touching the sequence: run that first.
 
+## No-script fallback: captions.srt
+
+`build_xmeml.py` also writes `captions.srt`. File > Import it, drag it onto the sequence: native, editable Premiere captions
+(plain text, no yellow keyword). Use it if the script route (and VS Code) is more trouble than it's worth.
+
 ## Known unknowns (first import is a checkpoint, scripts were written without Premiere to test against)
 
 - Keyframe time offsets and bezier interpolation from the XML.

@@ -145,3 +145,10 @@ data = {"mogrt": o.mogrt, "blurbMogrt": o.blurb_mogrt, "capTrack": cap_track, "b
 js = tpl.replace("/*__DATA__*/", "var DATA = " + json.dumps(data, ensure_ascii=False) + ";")
 jp = os.path.join(os.path.dirname(OUT), "place_captions.jsx"); open(jp, "w", encoding="utf-8").write(js)
 print(f"wrote {jp}  ({len(data['cues'])} caption cues" + (", 1 blurb" if data["blurb"] else "") + ")")
+
+# --- plain captions.srt: a no-script fallback. Premiere: File > Import the .srt, drag it onto the sequence (Captions) ---
+def _ts(t): return f"{int(t // 3600):02d}:{int(t % 3600 // 60):02d}:{t % 60:06.3f}".replace(".", ",")
+sp = os.path.join(os.path.dirname(OUT), "captions.srt")
+with open(sp, "w", encoding="utf-8") as fh:
+    for n_, (a, b, txt, kw) in enumerate(META.get("cues", []), 1): fh.write(f"{n_}\n{_ts(a)} --> {_ts(b)}\n{txt}\n\n")
+print(f"wrote {sp}  (no-script fallback: import into Premiere as editable captions)")
