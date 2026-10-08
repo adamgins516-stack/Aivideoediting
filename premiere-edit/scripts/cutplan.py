@@ -13,10 +13,11 @@
 import os, sys, json, argparse, subprocess
 import numpy as np
 FPS = 30
+SIZE = "1080:1920"          # --size 1920x1080 for horizontal footage
 def concat(src, regions, out, scale=True):
     fc = []; vs = []; as_ = []
     for i, (a, b) in enumerate(regions):
-        sc = ",scale=1080:1920:flags=lanczos" if scale else ""
+        sc = f",scale={SIZE}:flags=lanczos" if scale else ""
         fc.append(f"[0:v]trim={a:.4f}:{b:.4f},setpts=PTS-STARTPTS{sc}[v{i}]")
         fc.append(f"[0:a]atrim={a:.4f}:{b:.4f},asetpts=PTS-STARTPTS,afade=t=in:d=0.012,afade=t=out:st={b - a - 0.012:.4f}:d=0.012[a{i}]")
         vs.append(f"[v{i}]"); as_.append(f"[a{i}]")
@@ -55,8 +56,8 @@ def silence_keep(src, thr=-46.0, maxp=0.20, handle=0.06, head=0.06, tail=0.55):
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(); ap.add_argument("mode", choices=["silence", "whole"]); ap.add_argument("a"); ap.add_argument("b", nargs="?")
     ap.add_argument("--out", default="cut.mp4"); ap.add_argument("--keep"); ap.add_argument("--thr", type=float, default=-46.0)
-    ap.add_argument("--maxp", type=float, default=0.20); ap.add_argument("--handle", type=float, default=0.06); ap.add_argument("--no-scale", action="store_true")
-    o = ap.parse_args()
+    ap.add_argument("--maxp", type=float, default=0.20); ap.add_argument("--handle", type=float, default=0.06); ap.add_argument("--no-scale", action="store_true"); ap.add_argument("--size", default="1080x1920", help="output WxH; use 1920x1080 for horizontal footage")
+    o = ap.parse_args(); SIZE = o.size.replace("x", ":")
     if o.mode == "silence":
         src = o.a
         if o.keep:                                             # pre-chosen spans (e.g. the later take of each line), then trim pauses inside them

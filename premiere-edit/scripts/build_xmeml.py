@@ -27,7 +27,7 @@ ap.add_argument("--out"); ap.add_argument("--mogrt", default=os.path.expanduser(
 ap.add_argument("--blurb-mogrt", default=os.path.expanduser("~/Documents/premiere-edit/Blurb.mogrt"))
 o = ap.parse_args()
 L = os.path.abspath(o.layers); NAME = o.name
-META = json.load(open(f"{L}/meta.json")); FPS = int(META.get("fps", 30)); W, H = 1080, 1920
+META = json.load(open(f"{L}/meta.json")); FPS = int(META.get("fps", 30)); W, H = META.get("size", [1080, 1920])   # "size": [1920, 1080] in meta.json for horizontal
 OUT = o.out or os.path.join(os.path.dirname(L), f"{NAME}.xml")
 
 def probe(p, entries, stream="v:0"):

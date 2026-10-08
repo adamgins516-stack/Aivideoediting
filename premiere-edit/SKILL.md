@@ -48,6 +48,15 @@ and `references/captions-and-cards.md` before placing anything, `references/look
 
 Everything else (what to show when, which words to highlight) you decide from the transcript. Don't ask about it.
 
+## Horizontal footage and two people on camera
+
+The graphics library, safe zones and masks assume vertical 1080x1920. For a horizontal, plain-dialogue edit (no cards,
+no behind-the-head graphics): skip `render.py`. Transcribe each take, match takes to the script, choose the best take
+of every line, cut the pieces with ffmpeg (`cutplan.py silence --size 1920x1080` per take, or your own trims) into
+`premiere_layers/01_<start>s_TAKE.mp4` (mono AAC, same frame rate), add `05_00.00s_SFX.wav` if wanted, write
+`meta.json` with `{"fps": 30, "size": [1920, 1080], "zoom_keys": [], "cues": []}`, then run `build_xmeml.py`. Never
+squash horizontal footage into 1080x1920.
+
 ## The pipeline
 
 Work in a scratch folder next to the footage (`<video>-edit/work/`). Deliver to `<video>-edit/`.
